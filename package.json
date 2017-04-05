@@ -1,0 +1,22 @@
+{
+  "name": "download-with-webtorrent-button",
+  "version": "0.0.0",
+  "description": "Easily add a \"Download With WebTorrent\" button to your site!",
+  "main": "download-with-webtorrent-button.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmhilton/download-with-webtorrent-button.git"
+  },
+  "keywords": [],
+  "author": "William Hilton <wmhilton@gmail.com>",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/wmhilton/download-with-webtorrent-button/issues"
+  },
+  "homepage": "https://github.com/wmhilton/download-with-webtorrent-button#readme",
+  "maintainers": [],
+  "contributors": []
+}
