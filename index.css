@@ -8,7 +8,7 @@
   padding: 10px;
   border-radius: 10px;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-  background-image: url(/webtorrent-v3.1.svg),
+  background-image: url(webtorrent-v3.1.svg),
                     -webkit-linear-gradient(right, #4CAF50 0%, #009e9e 100%),
                     -webkit-linear-gradient(bottom right, #00b7b7 0%, #009e9e 100%);
   background-repeat: no-repeat, no-repeat, no-repeat;

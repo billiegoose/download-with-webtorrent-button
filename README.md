@@ -3,13 +3,15 @@ Easily add a "Download With WebTorrent" button to your site!
 
 ## Demo
 
-https://wmhilton.github.io/download-with-webtorrent-button/example.html
+https://wmhilton.github.io/download-with-webtorrent-button
 
 ## TODO
 
+- explain what it is and how to use it
 - make available as npm package
 - make usage example
-- explain what it is and how to use it (magnet links etc)
+- correctly auto-prefix CSS gradients
+- test on more browsers
 
 ## License
 
