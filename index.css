@@ -1,0 +1,42 @@
+.webtorrent-download {
+  display: inline-block;
+  color: #000;
+  text-decoration: none;
+  font: 11pt sans-serif;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  background-image: url(/webtorrent-v3.1.svg),
+                    -webkit-linear-gradient(right, #4CAF50 0%, #009e9e 100%),
+                    -webkit-linear-gradient(bottom right, #00b7b7 0%, #009e9e 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 5px 50%, left 100%, 100%;
+  background-size: 28px 28px, 0px 100%, 100%;
+  padding-left: 3em;
+}
+/* Used for initial width */
+.webtorrent-download:not(.initialized)::after {
+  display: block;
+  clear: left;
+  color: transparent;
+  content: 'Download with WebTorrent';
+  font-weight: normal;
+  text-align: center;
+  font: 8pt sans-serif;
+}
+.webtorrent-download.initialized::after {
+  content: ''
+}
+.webtorrent-download sub {
+  display: block;
+  clear: left;
+  font-weight: normal;
+  text-align: center;
+  font: 8pt sans-serif;
+}
+.webtorrent-download.no-webrtc sub {
+  color: blue;
+  textDecoration: underline;
+}
