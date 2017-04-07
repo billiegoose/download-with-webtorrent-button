@@ -1,13 +1,13 @@
 function registerWebtorrentLinks () {
   'use strict'
-  // Add onclick handlers to all <a class="webtorrent-download"> elements
-  var links = document.querySelectorAll('a.webtorrent-download')
-  for (let i = 0; i < links.length; i++) {
+  // Add onclick handlers to all <a data-webtorrent="..."> elements
+  var links = document.querySelectorAll('a[data-webtorrent]')
+  for (var i = 0; i < links.length; i++) {
     // Wrap the link innerHTML so its easier to update
     var a = links[i]
     var span = document.createElement('span')
     span.innerText = a.innerText
-    
+
     var sub = document.createElement('sub')
     if (WebTorrent.WEBRTC_SUPPORT) {
       sub.innerText = 'Download with WebTorrent'
@@ -16,14 +16,14 @@ function registerWebtorrentLinks () {
       console.log('WebRTC is not supported')
       a.classList.add('no-webrtc')
       var sublink = document.createElement('a')
-      sublink.href = a.dataset.torrent
+      sublink.href = a.dataset.webtorrent
       sublink.innerText = 'Download with Bittorrent'
       sub.appendChild(sublink)
     }
     a.innerText = ''
     a.appendChild(span)
     a.appendChild(sub)
-    a.classList.add('initialized')
+    a.classList.add('init')
   }
 
   // This is what runs when user clicks the link
@@ -51,16 +51,17 @@ function registerWebtorrentLinks () {
       })
 
       // This starts downloading the torrent
-      client.add(a.dataset.torrent, function (torrent) {
+      client.add(a.dataset.webtorrent, function (torrent) {
         console.log(torrent)
-        
+
         // Torrents can contain multiple files, so we gotta deal with that.
+        var file
         if (torrent.files.length === 1 || a.dataset.file == undefined) {
-          var file = torrent.files[0]
+          file = torrent.files[0]
         } else {
-          var file = torrent.files.find(function (file) { return file.name === a.dataset.file })
+          file = torrent.files.find(function (file) { return file.name === a.dataset.file })
         }
-        
+
         // Wrap the link text so we can update it easily
         var span = a.querySelector('span')
         var sub = a.querySelector('sub')
@@ -68,23 +69,25 @@ function registerWebtorrentLinks () {
         span.innerText = title + ' - ' + Math.round(torrent.progress * 100) + '%'
         sub.innerText = 'Downloading from ' + torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
         a.classList.add('downloading')
-        
+
         // Show progress bar
         var timer = setInterval(function () {
+          var numPeers = torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
+          var percent = Math.round(torrent.progress * 100) + '%'
           if (!torrent.done) {
             // Nifty progress bar using CSS gradient backgrounds
-            a.style = 'background-size: 28px 28px, ' + Math.round(torrent.progress * 100) + '% 100%, 100%;'
+            a.style = 'background-size: 28px 28px, ' + percent + ' 100%, 100%;'
             // Update download percentage
             if (!span.innerText.endsWith(' - Ready')) {
-              span.innerText = title + ' - ' + Math.round(torrent.progress * 100) + '%'
-              sub.innerText = 'Downloading from ' + torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
+              span.innerText = title + ' - ' + percent
+              sub.innerText = 'Downloading from ' + numPeers
             }
           } else if (torrent.done && a.classList.contains('seeding')) {
             span.innerText = file.name + ' - Ready'
-            sub.innerText = 'Seeding to ' + torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
+            sub.innerText = 'Seeding to ' + numPeers
           }
         }, 500)
-        
+
         // When the file is ready, change the button text to reflect that
         file.getBlobURL(function (err, url) {
           a.classList.remove('downloading')
