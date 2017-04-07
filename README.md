@@ -1,9 +1,12 @@
 # download-with-webtorrent-button
 Transform ordinary download links into super-powered WebTorrent ones!
 
-## Demo
+## Example
 
-https://wmhilton.github.io/download-with-webtorrent-button
+Check out the demo page: https://wmhilton.com/download-with-webtorrent-button
+
+[![screenshot of WebTorrent button](https://github.com/wmhilton/download-with-webtorrent-button/blob/master/dist/animated.gif?raw=true)](https://wmhilton.com/download-with-webtorrent-button)
+
 
 ## Rationale
 
