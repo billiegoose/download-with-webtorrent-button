@@ -27,9 +27,13 @@ link! All you have to do is paste a small code snippet in your HTML.
 
 ## Usage
 
-You will need a .torrent file or a `magnet:` link for your file. If you don't have one yet,
-you can make one here: http://www.urlhash.com/ (Hopefully I can automate that
-step for you in the future.)
+You will need a .torrent file or a `magnet:` link for your file. ~~If you don't have one yet,
+you can make one here: http://www.urlhash.com/~~ This site does not generate compatible
+torrents. I believe there are two requirements it fails. 1) the .torrent file must be hosted on a
+server that supports cross-origin AJAX requests (CORS) and 2) the .torrent must include
+WebSocket or HTTP trackers since the browser cannot directly talk to UDP trackers. Also,
+I'm pretty sure 3) the torrent file must include a webseed. And *possibly* 4) the file
+host must support HTTP range requests.
 
 To add a **Download with WebTorrent** button to your page, use a regular `<a>` link.
 Add a `data-webtorrent` attribute with the magnet URI or a URL pointing to a .torrent file.
