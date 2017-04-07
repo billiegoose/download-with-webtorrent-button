@@ -1,3 +1,4 @@
+/* global WebTorrent */
 function registerWebtorrentLinks () {
   'use strict'
   // Add onclick handlers to all <a data-webtorrent="..."> elements
@@ -56,7 +57,7 @@ function registerWebtorrentLinks () {
 
         // Torrents can contain multiple files, so we gotta deal with that.
         var file
-        if (torrent.files.length === 1 || a.dataset.file == undefined) {
+        if (torrent.files.length === 1 || a.dataset.file === undefined) {
           file = torrent.files[0]
         } else {
           file = torrent.files.find(function (file) { return file.name === a.dataset.file })
@@ -66,12 +67,10 @@ function registerWebtorrentLinks () {
         var span = a.querySelector('span')
         var sub = a.querySelector('sub')
         var title = span.innerText
-        span.innerText = title + ' - ' + Math.round(torrent.progress * 100) + '%'
-        sub.innerText = 'Downloading from ' + torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
         a.classList.add('downloading')
 
         // Show progress bar
-        var timer = setInterval(function () {
+        function progress () {
           var numPeers = torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
           var percent = Math.round(torrent.progress * 100) + '%'
           if (!torrent.done) {
@@ -86,10 +85,16 @@ function registerWebtorrentLinks () {
             span.innerText = file.name + ' - Ready'
             sub.innerText = 'Seeding to ' + numPeers
           }
-        }, 500)
+        }
+        progress()
+        setInterval(progress, 500)
 
         // When the file is ready, change the button text to reflect that
         file.getBlobURL(function (err, url) {
+          if (err) {
+            window.alert('WebTorrent error: source getBlobURL')
+            return
+          }
           a.classList.remove('downloading')
           a.classList.add('ready')
           span.innerText = file.name + ' - Ready'
@@ -110,4 +115,7 @@ function registerWebtorrentLinks () {
   }
 }
 
-registerWebtorrentLinks()
+if (window) {
+  window.registerWebtorrentLinks = registerWebtorrentLinks
+  registerWebtorrentLinks()
+}
