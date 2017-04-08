@@ -45,11 +45,23 @@ function registerWebtorrentLinks () {
     }
     // Otherwise, do this stuff instead:
     try {
+      // Wrap the link text so we can update it easily
+      var span = a.querySelector('span')
+      var sub = a.querySelector('sub')
+      var title = span.innerText
+
       // Initialize WebTorrent
       var client = new WebTorrent()
       client.on('error', function (err) {
         console.error('ERROR: ' + err.message)
       })
+
+      // If there is no torrent file / magnet link / btih then try to
+      // dynamically generate one with the free service I built.
+      if (a.dataset.webtorrent === 'auto') {
+        a.dataset.webtorrent = 'https://webtorrentify.now.sh/?href=' + a.href
+        sub.innerText = 'Generating .torrent file...'
+      }
 
       // This starts downloading the torrent
       client.add(a.dataset.webtorrent, function (torrent) {
@@ -63,10 +75,6 @@ function registerWebtorrentLinks () {
           file = torrent.files.find(function (file) { return file.name === a.dataset.file })
         }
 
-        // Wrap the link text so we can update it easily
-        var span = a.querySelector('span')
-        var sub = a.querySelector('sub')
-        var title = span.innerText
         a.classList.add('downloading')
 
         // Show progress bar
@@ -99,8 +107,8 @@ function registerWebtorrentLinks () {
           a.classList.add('ready')
           span.innerText = file.name + ' - Ready'
           sub.innerText = 'Click to save file'
+          a.download = file.name
           a.href = url
-          a.download = a.dataset.file
         })
       })
       // Prevent default link behavior and don't follow it.

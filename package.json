@@ -25,7 +25,7 @@
     "last 2 versions"
   ],
   "scripts": {
-    "start": "http-server -o",
+    "start": "http-server --cors -o",
     "precommit": "npm test && npm run build",
     "build": "webpack -p",
     "gif": "node generate_gif.js",
