@@ -42,6 +42,7 @@ function registerWebtorrentLinks () {
   // This is what runs when user clicks the link
   function downloadWithWebTorrent (e) {
     var a = e.currentTarget
+    a.classList.remove('init')
     a.classList.add('downloading')
     try {
       var span = a.querySelector('span')
