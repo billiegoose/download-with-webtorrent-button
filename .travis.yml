@@ -1,0 +1,12 @@
+language: node_js
+node_js: 6
+deploy:
+  provider: npm
+  email: wmhilton@gmail.com
+  on:
+    skip_cleanup: true
+    tags: true
+    branch: master
+    repo: wmhilton/download-with-webtorrent-button
+  api_key:
+    secure: hlb8qQQlurY9WGoyU7le3HSrxwZil6GJp2N8ZPlrJQS1fawbg5uwLxI2JkdydCEAIe3/SVD2JEKQTa2toq20z/w2cWYEGectKJxMUGzM4VOK9UgSsBM0CKTa7N3nXoZbxZRjOjDcdHtPV6q5HBy3VKM3RIcJsOst8DbQHFI9cfhrOLBPm+Y9Ke+dE7mij+P1ys+tnLRLzEBEC9Ea7fn85/+4IAmhU7tZp/lyu1doPlFSNa7bkscB8DCB82DWkY9Vw4fRJYpHPC2861RsYlXoVdcUhv6EdCCKFtQIJQsxoToCOVtCV5tHRRlMK3rmv9r1I/cPjYVkdcfRmgO+P/3IlT+5GDiYGaBvq4Og3vdyMcPhf7poQhIJDysCTLo+BpODP3zUeCprE7dqMrkTHrGlL46gSGBmRYIJkhxtC0oMLug5QEwep510jHSdidutQVoX5w5dGdy70jKyNBYJrTOOuaQ52QNWPBGy1LniEBGD50Dv/Qk71lhElhMqDpsj15JPIlwy4hE0aLQfrNE1bp3+YjspUkbSARcwBuyoFr90+lMZKDJJtYH9Kms8TQmcbycmPkwacAJj6e8/3rD5njgVwDfm/8c5fGy+qilz5tYGIrDJwaURE1MRRAP+NZc6srWglOFsGns05r09F0eSNJ19qVxY+s7LRA+7TYTeltiWpss=
