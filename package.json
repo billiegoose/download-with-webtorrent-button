@@ -1,6 +1,6 @@
 {
   "name": "download-with-webtorrent-button",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Transform ordinary download links into super-powered WebTorrent ones!",
   "main": "./index.js",
   "style": "./index.css",
