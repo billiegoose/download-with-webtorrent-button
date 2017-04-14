@@ -17,13 +17,20 @@ a[data-webtorrent] {
   padding-left: 3em;
 }
 /* Used for initial width */
-a[data-webtorrent]:not(.init)::after {
+a[data-webtorrent]::after {
   display: block;
   clear: left;
   content: 'Download with WebTorrent';
   font-weight: normal;
   text-align: center;
   font: 8pt sans-serif;
+}
+a[data-webtorrent].init::after,
+a[data-webtorrent].downloading::after,
+a[data-webtorrent].ready::after,
+a[data-webtorrent].seeding::after {
+  display: none;
+  content: '';
 }
 a[data-webtorrent] sub {
   display: block;
