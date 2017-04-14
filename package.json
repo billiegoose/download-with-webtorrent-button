@@ -4,9 +4,6 @@
   "description": "Transform ordinary download links into super-powered WebTorrent ones!",
   "main": "./index.js",
   "style": "./index.css",
-  "dependencies": {
-    "webtorrent": "^0.98.15"
-  },
   "devDependencies": {
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
@@ -19,7 +16,8 @@
     "postcss-loader": "^1.3.3",
     "standard": "^10.0.1",
     "svg-url-loader": "^2.0.2",
-    "webpack": "^2.3.3"
+    "webpack": "^2.3.3",
+    "webtorrent": "^0.98.15"
   },
   "browserlist": [
     "last 2 versions"
