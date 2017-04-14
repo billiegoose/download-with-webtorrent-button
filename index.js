@@ -12,7 +12,7 @@ function registerWebtorrentLinks () {
     var sub = document.createElement('sub')
     if (WebTorrent.WEBRTC_SUPPORT) {
       sub.innerText = 'Download with WebTorrent'
-      a.addEventListener('click', downloadWithWebTorrent)
+      a.addEventListener('click', onButtonClick)
     } else {
       console.log('WebRTC is not supported')
       a.classList.add('no-webrtc')
@@ -27,25 +27,23 @@ function registerWebtorrentLinks () {
     a.classList.add('init')
   }
 
+  function onButtonClick (e) {
+    // The button has a simple state machine that progresses from
+    // 'init' to 'downloading' to 'ready' to 'seeding' and clicks
+    // are handled differently in each case.
+    var a = e.currentTarget
+    if (a.classList.contains('init')) return downloadWithWebTorrent(e)
+    if (a.classList.contains('downloading')) return ignoreClicks(e)
+    if (a.classList.contains('ready')) return saveFile(e)
+    if (a.classList.contains('seeding')) return saveFile(e)
+    return true
+  }
+
   // This is what runs when user clicks the link
   function downloadWithWebTorrent (e) {
     var a = e.currentTarget
-    // Once the file is downloaded, we change the href to point to a blob.
-    // If we already have the blob then return to let the link do its default behavior.
-    if (a.classList.contains('ready')) {
-      // yay lets store state in the DOM because we're lazy!
-      a.classList.remove('ready')
-      a.classList.add('seeding')
-      return true
-    }
-    // If we're already downloading don't start another download
-    if (a.classList.contains('downloading')) {
-      e.preventDefault()
-      return false
-    }
-    // Otherwise, do this stuff instead:
+    a.classList.add('downloading')
     try {
-      // Wrap the link text so we can update it easily
       var span = a.querySelector('span')
       var sub = a.querySelector('sub')
       var title = span.innerText
@@ -56,8 +54,8 @@ function registerWebtorrentLinks () {
         console.error('ERROR: ' + err.message)
       })
 
-      // If there is no torrent file / magnet link / btih then try to
-      // dynamically generate one with the free service I built.
+      // The 'auto' option will dynamically generate a .torrent file
+      // using a free service I built
       if (a.dataset.webtorrent === 'auto') {
         a.dataset.webtorrent = 'https://webtorrentify.now.sh/?href=' + a.href
         sub.innerText = 'Generating .torrent file...'
@@ -67,7 +65,7 @@ function registerWebtorrentLinks () {
       client.add(a.dataset.webtorrent, function (torrent) {
         console.log(torrent)
 
-        // Torrents can contain multiple files, so we gotta deal with that.
+        // Torrents can contain multiple files, so we have to deal with that.
         var file
         if (torrent.files.length === 1 || a.dataset.file === undefined) {
           file = torrent.files[0]
@@ -75,11 +73,10 @@ function registerWebtorrentLinks () {
           file = torrent.files.find(function (file) { return file.name === a.dataset.file })
         }
 
-        a.classList.add('downloading')
-
         // Show progress bar
         function progress () {
-          var numPeers = torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers')
+          var numPeers = torrent.numPeers - 1 // Don't count yourself
+          numPeers += (numPeers === 1 ? ' peer' : ' peers')
           var percent = Math.round(torrent.progress * 100) + '%'
           if (!torrent.done) {
             // Nifty progress bar using CSS gradient backgrounds
@@ -87,11 +84,11 @@ function registerWebtorrentLinks () {
             // Update download percentage
             if (!span.innerText.endsWith(' - Ready')) {
               span.innerText = title + ' - ' + percent
-              sub.innerText = 'Downloading from ' + numPeers
+              sub.innerText = 'Downloading (' + numPeers + ')'
             }
           } else if (torrent.done && a.classList.contains('seeding')) {
             span.innerText = file.name + ' - Ready'
-            sub.innerText = 'Seeding to ' + numPeers
+            sub.innerText = 'Seeding (' + numPeers + ')'
           }
         }
         progress()
@@ -120,6 +117,21 @@ function registerWebtorrentLinks () {
       // to download the link without WebTorrent if possible.
       return true
     }
+  }
+
+  // If we're already downloading don't start another download
+  function ignoreClicks (e) {
+    e.preventDefault()
+    return false
+  }
+
+  // Once the file is downloaded, we change the href to point to a blob.
+  // Thus we just let the link do its default behavior.
+  function saveFile (e) {
+    var a = e.currentTarget
+    a.classList.remove('ready')
+    a.classList.add('seeding')
+    return true
   }
 }
 
