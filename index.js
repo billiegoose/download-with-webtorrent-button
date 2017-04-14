@@ -6,24 +6,22 @@ function registerWebtorrentLinks () {
   for (var i = 0; i < links.length; i++) {
     // Wrap the link innerHTML so its easier to update
     var a = links[i]
-    var span = document.createElement('span')
-    span.innerText = a.innerText
 
-    var sub = document.createElement('sub')
     if (WebTorrent.WEBRTC_SUPPORT) {
-      sub.innerText = 'Download with WebTorrent'
+      a.title = 'Download with WebTorrent'
       a.addEventListener('click', onButtonClick)
     } else {
-      console.log('WebRTC is not supported')
       a.classList.add('no-webrtc')
-      var sublink = document.createElement('a')
-      sublink.href = a.dataset.webtorrent
-      sublink.innerText = 'Download with Bittorrent'
-      sub.appendChild(sublink)
+      if (a.dataset.webtorrent !== 'auto') {
+        a.title = ''
+        var sublink = document.createElement('a')
+        sublink.href = a.dataset.webtorrent
+        sublink.innerText = 'alternate Bittorrent link'
+        a.appendChild(sublink)
+      } else {
+        a.title = 'Download'
+      }
     }
-    a.innerText = ''
-    a.appendChild(span)
-    a.appendChild(sub)
     a.classList.add('init')
   }
 
@@ -45,9 +43,7 @@ function registerWebtorrentLinks () {
     a.classList.remove('init')
     a.classList.add('downloading')
     try {
-      var span = a.querySelector('span')
-      var sub = a.querySelector('sub')
-      var title = span.innerText
+      var title = a.innerText
 
       // Initialize WebTorrent
       var client = new WebTorrent()
@@ -59,7 +55,7 @@ function registerWebtorrentLinks () {
       // using a free service I built
       if (a.dataset.webtorrent === 'auto') {
         a.dataset.webtorrent = 'https://webtorrentify.now.sh/?href=' + a.href
-        sub.innerText = 'Generating .torrent file...'
+        a.title = 'Generating .torrent file...'
       }
 
       // This starts downloading the torrent
@@ -83,13 +79,13 @@ function registerWebtorrentLinks () {
           a.style = 'background-size: 28px 28px, ' + percent + ' 100%, 100%;'
           if (!torrent.done) {
             // Update download percentage
-            if (!span.innerText.endsWith(' - Ready')) {
-              span.innerText = title + ' - ' + percent
-              sub.innerText = 'Downloading (' + numPeers + ')'
+            if (!a.innerText.endsWith(' - Ready')) {
+              a.innerText = title + ' - ' + percent
+              a.title = 'Downloading (' + numPeers + ')'
             }
           } else if (torrent.done && a.classList.contains('seeding')) {
-            span.innerText = file.name + ' - Ready'
-            sub.innerText = 'Seeding (' + numPeers + ')'
+            a.innerText = file.name + ' - Ready'
+            a.title = 'Seeding (' + numPeers + ')'
           }
         }
         progress()
@@ -103,8 +99,8 @@ function registerWebtorrentLinks () {
           }
           a.classList.remove('downloading')
           a.classList.add('ready')
-          span.innerText = file.name + ' - Ready'
-          sub.innerText = 'Click to save file'
+          a.innerText = file.name + ' - Ready'
+          a.title = 'Click to save file'
           a.download = file.name
           a.href = url
         })

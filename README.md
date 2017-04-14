@@ -11,7 +11,7 @@ Check out the demo page: https://wmhilton.com/download-with-webtorrent-button
 ## Rationale
 
 Do you have a big, popular file that lots of people download and the Internet
-would grind to a halt if your website went down? (*Cough*, nodejs.org, *cough*)
+would grind to a halt if your website went down?
 It is EASY to spread the burden of hosting a file among all the people who are
 downloading it. Bittorrent (despite its association with piracy) is a fabulous
 network protocol that does exactly that. It use to be that you needed to install
@@ -25,51 +25,72 @@ accessible as possible, I decided to make a "Download with WebTorrent" button
 that turns your ordinary download link into a super-powered WebTorrent download
 link! All you have to do is paste a small code snippet in your HTML.
 
-## Usage
-
-You will need a .torrent file or a `magnet:` link for your file. ~~If you don't have one yet,
-you can make one here: http://www.urlhash.com/~~ This site does not generate compatible
-torrents. I believe there are two requirements it fails. 1) the .torrent file must be hosted on a
-server that supports cross-origin AJAX requests (CORS) and 2) the .torrent must include
-WebSocket or HTTP trackers since the browser cannot directly talk to UDP trackers. Also,
-I'm pretty sure 3) the torrent file must include a webseed. And *possibly* 4) the file
-host must support HTTP range requests.
-
-To add a **Download with WebTorrent** button to your page, use a regular `<a>` link.
-Add a `data-webtorrent` attribute with the magnet URI or a URL pointing to a .torrent file.
-The `href` attribute will be used as a fallback on browsers that can't run WebTorrent.
-Note: If the torrent is a folder rather than a single file, add a `data-file` attribute
-with the name of the individual file.
-
-    <a href="file.mp4" data-webtorrent="file.torrent">Link Text</a>
 
 ## Installation using a CDN
 
 Add the following stylesheet to `<head>`:
 
-    <link rel="stylesheet" href="https://unpkg.com/download-with-webtorrent-button/dist/index.css">
+```html
+<link rel="stylesheet" href="https://unpkg.com/download-with-webtorrent-button/dist/index.css">
+```
 
 And the following scripts to the bottom of `<body>`:
 
-    <script src="https://unpkg.com/webtorrent/webtorrent.min.js"></script>
-    <script src="https://unpkg.com/download-with-webtorrent-button/dist/index.js"></script>
+```html
+<script src="https://unpkg.com/webtorrent/webtorrent.min.js"></script>
+<script src="https://unpkg.com/download-with-webtorrent-button/dist/index.js"></script>
+```
 
 This adds a single function `registerWebtorrentLinks()` to the global scope.
 It automatically initializes `a` tags. If you add additional `a` tags after the
-initial page load (such as in the case of single page apps) you can rerun the
-initializer
+initial page load (such as in the case of single page apps) you can rerun registerWebtorrentLinks().
 
-## Installation using a module bundler
+If you want to override the CSS styles, take a look at `index.css`.
 
-WIP
+## Installation using a module bundler?
 
-## TODO
+Somebody should fork this and make it a React component. Pull requests welcome!
 
-- [x] explain what it is and how to use it
-- [ ] make available as npm package
-- [x] make usage example
-- [ ] on more browsers
-- [x] correctly auto-prefix CSS gradients
+
+## Usage
+
+### The easiest way
+
+To add a **Download with WebTorrent** button to your page, use a regular `<a>` link.
+The link's `href` attribute will be provided as a fallback on browsers that can't run WebTorrent,
+or if an error occurs. Then add a `data-webtorrent` attribute.
+
+You can use `data-webtorrent="auto"` and these
+[fabulous](https://github.com/wmhilton/webtorrentify-link)
+[free](https://github.com/wmhilton/webtorrentify-server)
+[services](https://github.com/wmhilton/cors-buster)
+will auto-generate a WebTorrent-compatible .torrent file for your link.
+
+```html
+<a href="file.mp4" data-webtorrent="auto">Link Text</a>
+```
+
+### Bring your own torrent
+
+If you already have a magnet URI, you can use that,
+
+```html
+<a href="file.mp4" data-webtorrent="magnet:?xt=urn:btih:...">Link Text</a>
+```
+
+or the location of a .torrent file,
+
+```html
+<a href="file.mp4" data-webtorrent="https://example.com/path/to/file.torrent">Link Text</a>
+```
+
+but know that WebTorrent is not yet compatible with the DHT and requires `ws` or `http` trackers. If your .torrent only includes `udp` trackers or is tracker-less and relies on the DHT, you are better off using `data-webtorrent="auto"`.
+
+If your torrent is a folder torrent rather than a single file, add a `data-file` attribute with the name of the individual file you intend the link for.
+
+```html
+<a href="https://webtorrent.io/torrents/Sintel/Sintel.mp4" data-webtorrent="magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent" data-file="Sintel.mp4">Sintel</a>
+```
 
 ## License
 

@@ -16,30 +16,26 @@ a[data-webtorrent] {
   background-size: 28px 28px, 0px 100%, 100%;
   padding-left: 3em;
 }
-/* Used for initial width */
+/* Used for displaying status messages */
 a[data-webtorrent]::after {
   display: block;
   clear: left;
-  content: 'Download with WebTorrent';
+  content: attr(title);
   font-weight: normal;
   text-align: center;
   font: 8pt sans-serif;
 }
-a[data-webtorrent].init::after,
-a[data-webtorrent].downloading::after,
-a[data-webtorrent].ready::after,
-a[data-webtorrent].seeding::after {
-  display: none;
-  content: '';
-}
-a[data-webtorrent] sub {
+/* Used for fallback Bittorrent link */
+a[data-webtorrent].no-webrtc a {
   display: block;
   clear: left;
   font-weight: normal;
   text-align: center;
   font: 8pt sans-serif;
+  color: black;
+  text-decoration: none;
+  width: fit-content;
 }
-a[data-webtorrent].no-webrtc sub {
-  color: blue;
-  textDecoration: underline;
+a[data-webtorrent].no-webrtc a:hover {
+  text-decoration: underline;
 }
