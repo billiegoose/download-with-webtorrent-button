@@ -74,7 +74,7 @@ function registerWebtorrentLinks () {
         function progress () {
           var numPeers = torrent.numPeers - 1 // Don't count yourself
           numPeers += (numPeers === 1 ? ' peer' : ' peers')
-          var percent = Math.round(torrent.progress * 100) + '%'
+          var percent = Math.floor(torrent.progress * 100) + '%'
           // Nifty progress bar using CSS gradient backgrounds
           a.style = 'background-size: 28px 28px, ' + percent + ' 100%, 100%;'
           if (!torrent.done) {
