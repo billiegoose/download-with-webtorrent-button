@@ -7,6 +7,7 @@ Check out the demo page: https://wmhilton.github.io/download-with-webtorrent-but
 
 [![screenshot of WebTorrent button](https://github.com/wmhilton/download-with-webtorrent-button/blob/master/dist/animated.gif?raw=true)](https://wmhilton.github.io/download-with-webtorrent-button)
 
+<a href="https://app.codesponsor.io/link/tZYS6JjRUMRBU2NL7eN4t5Gg/wmhilton/download-with-webtorrent-button" rel="nofollow"><img src="https://app.codesponsor.io/embed/tZYS6JjRUMRBU2NL7eN4t5Gg/wmhilton/download-with-webtorrent-button.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
 
 ## Rationale
 
